@@ -7,7 +7,9 @@ import { usePathname } from "next/navigation";
 
 
 
-
+/* 
+    Bottombar is for mobile devices
+*/
 function Bottombar () {
 
     const pathname = usePathname();
