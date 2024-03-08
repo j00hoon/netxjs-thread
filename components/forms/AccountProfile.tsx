@@ -4,11 +4,9 @@ import { Button } from "@/components/ui/button"
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -25,12 +23,12 @@ import { ChangeEvent } from "react";
 
     interface Props {
         user : {
-            id : string;
-            objectId : string;
-            username : string;
-            name : string;
-            bio : string;
-            image : string;
+            id? : string;
+            objectId? : string;
+            username? : string;
+            name? : string;
+            bio? : string;
+            image? : string;
         };
         btnTitle : string;
     }
@@ -41,10 +39,10 @@ import { ChangeEvent } from "react";
         const form = useForm({
         resolver : zodResolver(UserValidation),
             defaultValues : {
-                profile_photo : "",
-                name : "",
-                username : "",
-                bio : ""
+                profile_photo : user?.image || "",
+                name : user?.name || "",
+                username : user?.username || "",
+                bio : user?.bio || ""
             }
         });
 
@@ -114,12 +112,12 @@ import { ChangeEvent } from "react";
                     name="name"
                     render={({ field }) => (
 
-                        <FormItem className="flex items-center gap-3 w-full">
+                        <FormItem className="flex flex-col gap-3 w-full">
                         <FormLabel className="text-base-semibold text-light-2">
                            Name
                         </FormLabel>
 
-                        <FormControl className="flex-1 text-base-semibold text-gray-200">
+                        <FormControl>
                             <Input 
                                 type="text"
                                 className="account-form_input no-focus"
@@ -136,12 +134,12 @@ import { ChangeEvent } from "react";
                     name="username"
                     render={({ field }) => (
 
-                        <FormItem className="flex items-center gap-3 w-full">
+                        <FormItem className="flex flex-col gap-3 w-full">
                         <FormLabel className="text-base-semibold text-light-2">
                            Username
                         </FormLabel>
 
-                        <FormControl className="flex-1 text-base-semibold text-gray-200">
+                        <FormControl>
                             <Input 
                                 type="text"
                                 className="account-form_input no-focus"
@@ -158,12 +156,12 @@ import { ChangeEvent } from "react";
                     name="bio"
                     render={({ field }) => (
 
-                        <FormItem className="flex items-center gap-3 w-full">
+                        <FormItem className="flex flex-col gap-3 w-full">
                         <FormLabel className="text-base-semibold text-light-2">
                            Bio
                         </FormLabel>
 
-                        <FormControl className="flex-1 text-base-semibold text-gray-200">
+                        <FormControl>
                             <Textarea 
                                 rows={10}
                                 className="account-form_input no-focus"
@@ -175,7 +173,12 @@ import { ChangeEvent } from "react";
                     )}
                 />
 
-                <Button type="submit">Submit</Button>
+                <Button 
+                    type="submit" 
+                    className="bg-primary-500"
+                >
+                    Submit
+                </Button>
 
             </form>
         </Form>
