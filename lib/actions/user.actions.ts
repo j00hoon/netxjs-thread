@@ -3,20 +3,32 @@
 import { revalidatePath } from "next/cache";
 import User from "../models/user.model";
 import { connectToDB } from "../mongoose";
+import { StringValidation } from "zod";
 
 
 
-export async function updateUser(
-    userId : string,
-    username : string,
-    name : string,
-    bio : string,
-    image : string,
-    path : string
-) : Promise<void> {
-    connectToDB();
 
+interface Params {
+    userId : string | undefined;
+    username : string;
+    name : string;
+    bio : string;
+    image : string;
+    path : string;
+}
+
+export async function updateUser({
+    userId,
+    username,
+    name,
+    bio,
+    image,
+    path
+} : Params) : Promise<void> {
+    
     try {
+        connectToDB();
+
         await User.findOneAndUpdate(
             { id : userId },
             {
@@ -29,7 +41,7 @@ export async function updateUser(
             { upsert : true }
         );
     
-        if (path === '/profile/edit') {
+        if (path === "/profile/edit") {
             revalidatePath(path);
         }
     } catch (error: any) {
