@@ -7,6 +7,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -14,7 +15,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod"; 
 import { UserValidation } from "@/lib/validations/user";
 
-import { z } from "zod"
+import * as z from "zod"
 import Image from "next/image";
 import { ChangeEvent, useState } from "react";
 import { isBase64Image } from "@/lib/utils";
@@ -165,6 +166,8 @@ import { usePathname, useRouter } from "next/navigation";
                             />
                         </FormControl>
 
+                        <FormMessage />
+
                         </FormItem>
                     )}
                 />
@@ -186,6 +189,8 @@ import { usePathname, useRouter } from "next/navigation";
                                 {...field}
                             />
                         </FormControl>
+
+                        <FormMessage />
 
                         </FormItem>
                     )}
@@ -209,6 +214,8 @@ import { usePathname, useRouter } from "next/navigation";
                             />
                         </FormControl>
 
+                        <FormMessage />
+
                         </FormItem>
                     )}
                 />
@@ -230,6 +237,8 @@ import { usePathname, useRouter } from "next/navigation";
                                 {...field}
                             />
                         </FormControl>
+
+                        <FormMessage />
 
                         </FormItem>
                     )}
