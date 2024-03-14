@@ -8,8 +8,7 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
-  FormMessage
+  FormLabel
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod"; 
@@ -17,6 +16,7 @@ import { usePathname, useRouter } from "next/navigation";
 
 import { CommentValidation } from "@/lib/validations/thread";
 import Image from "next/image";
+import { addCommentToThread } from "@/lib/actions/thread.actions";
 // import { createThread } from "@/lib/actions/thread.actions";
 
 
@@ -39,6 +39,9 @@ const Comment = ({ threadId, currentUserImg, currentUserId,} : Props) => {
     const router = useRouter();
     const pathname = usePathname();
 
+
+
+
     const form = useForm<z.infer<typeof CommentValidation>>({
         resolver : zodResolver(CommentValidation),
             defaultValues : {
@@ -53,14 +56,9 @@ const Comment = ({ threadId, currentUserImg, currentUserId,} : Props) => {
     // "values" are created by react hook form
     const onSubmit = async (values : z.infer<typeof CommentValidation>) => {        
         // Backend
-        // await createThread({ 
-        //     text : values.thread,
-        //     author : userId,
-        //     communityId : null,
-        //     path : pathname
-        // });        
+        await addCommentToThread(threadId, values.thread, JSON.parse(currentUserId), pathname);        
 
-        router.push("/");
+        form.reset();
     }
 
 
