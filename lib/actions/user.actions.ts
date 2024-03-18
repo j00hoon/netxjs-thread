@@ -5,6 +5,7 @@ import User from "../models/user.model";
 import { connectToDB } from "../mongoose";
 import { StringValidation } from "zod";
 import Thread from "../models/thread.model";
+import { FilterQuery, SortOrder } from "mongoose";
 
 
 
@@ -115,5 +116,68 @@ export async function fetchUserPosts(userId: string) {
             return threads;
     } catch (error : any) {
         throw new Error(`Failed to fetch user posts ${error.message}`);
+    }
+}
+
+
+
+
+
+export async function fetchUsers({ 
+    userId,
+    searchString = "",
+    pageNumber = 1,
+    pageSize = 20,
+    sortBy = "desc"
+ } : {
+    userId : string;
+    searchString? : string;
+    pageNumber? : number;
+    pageSize? : number;
+    sortBy? : SortOrder
+ }) {
+    try {
+        connectToDB();
+
+        // Skip how many serach results
+        const skipAmount = (pageNumber - 1) * pageSize;
+
+        const regex = new RegExp(searchString, "i");
+
+        // Fetch query and search conditions
+        const query: FilterQuery<typeof User> = {
+            // $ne means "not equals"
+            // we want to search all users, but filtered out myself
+            id : { $ne : userId }
+        }
+
+        // Actual searching
+        if (searchString.trim() !== "") {
+            query.$or = [
+                // Searching for by "username" and "name" both
+                // because in case you know only someone by username or name
+                { username : { $regex : regex }},
+                { name : { $regex : regex }}
+            ]
+        }
+
+        // Sorting
+        const sortOptions = { createdAt : sortBy };
+
+        const usersQuery = User.find(query)
+            .sort(sortOptions)
+            .skip(skipAmount)
+            .limit(pageSize);
+
+        // To find out the total number of pages for the users
+        const totalUsersCount = await User.countDocuments(query);
+
+        const users = await usersQuery.exec();
+
+        const isNext = totalUsersCount > skipAmount + users.length;
+
+        return { users, isNext };
+    } catch (error: any) {
+        throw new Error(`Failed to fetch users : ${error.message}`);
     }
 }

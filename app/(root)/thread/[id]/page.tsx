@@ -33,7 +33,7 @@ const Page = async ({ params } : { params : { id : string }}) => {
                 <ThreadCard 
                     key={thread._id}
                     id={thread._id}
-                    currentUserId={user?.id || ""} // or go to TheradCard.tsx and then change the type of "currentUserId" of interface Props as "string | undefined"
+                    currentUserId={user?.id || ""} // or go to ThreadCard.tsx and then change the type of "currentUserId" of interface Props as "string | undefined"
                     parentId={thread.parentId}
                     content={thread.text}
                     author={thread.author}
